@@ -4,11 +4,13 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
@@ -29,12 +31,20 @@ public class SpringConfig implements WebMvcConfigurer /*extends WebMvcConfigurer
         return viewResolver;
     }
 
+//    @Bean
+//    public MessageSource messageSource() {
+//        ResourceBundleMessageSource resource = new ResourceBundleMessageSource();
+//        //resource.setBasenames("translate", "messages", "application");
+//        resource.setBasenames("WEB-INF/i18n/translate","WEB-INF/i18n/messages", "WEB-INF/i18n/application", "WEB-INF/i18n/translate");
+//        return resource;
+//    }
     @Bean
-    public MessageSource messageSource() {
-        ResourceBundleMessageSource resource = new ResourceBundleMessageSource();
-        resource.setBasenames("translate", "messages", "application");
-        //resource.setBasenames("WEB-INF/i18n/translate","/WEB-INF/i18n/messages", "/WEB-INF/i18n/application");
-        return resource;
+    public ReloadableResourceBundleMessageSource messageSource() {
+        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        messageSource.setBasenames("WEB-INF/i18n/messages", "WEB-INF/i18n/application", "WEB-INF/i18n/translate");
+        messageSource.setDefaultEncoding("UTF-8");
+        messageSource.setFallbackToSystemLocale(false);
+        return messageSource;
     }
 
     @Override
@@ -52,6 +62,12 @@ public class SpringConfig implements WebMvcConfigurer /*extends WebMvcConfigurer
         localeResolver.setCookieName("my-locale-cookie");
         localeResolver.setCookieMaxAge(3600);
         return localeResolver;
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/resources/**").addResourceLocations("/")
+                .setCachePeriod(31556926);
     }
 
 //    private final ApplicationContext applicationContext;
