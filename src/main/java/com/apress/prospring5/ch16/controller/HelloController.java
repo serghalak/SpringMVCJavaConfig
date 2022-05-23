@@ -1,7 +1,9 @@
 package com.apress.prospring5.ch16.controller;
 
+import com.apress.prospring5.ch16.model.Student;
+import com.apress.prospring5.ch16.service.StudentService;
+import org.apache.commons.io.IOUtils;
 import org.springframework.context.MessageSource;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,33 +11,41 @@ import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
-import org.apache.commons.io.IOUtils;
 
 //@Controller
 @RestController
 public class HelloController {
 
     private MessageSource messageSource;
+    private StudentService studentService;
 
-    public HelloController(MessageSource messageSource) {
+    public HelloController(MessageSource messageSource, StudentService studentService) {
         this.messageSource = messageSource;
+        this.studentService = studentService;
     }
 
     @GetMapping("/hello-world")
     public String sayHello(Model model) {
 
         //model.addAttribute("test", messageSource.getMessage("singer_save_success", null, Locale.ENGLISH));
+        String message = messageSource.getMessage("userform.title", null, Locale.CHINA);
         System.out.println(messageSource.getMessage("userform.title", null, Locale.ENGLISH));
-        System.out.println(messageSource.getMessage("label_welcome", null, Locale.ENGLISH));
-        return "hello_world";
+        System.out.println(messageSource.getMessage("label_welcome", null, Locale.US));
+        //return "hello_world";
+        return message;
     }
 
+    @GetMapping("/user/{id}")
+    public String getUserById(@PathVariable("id") Long id) {
+        System.out.println(">>>>id: " + id);
+        return studentService.getStudentById(id).toString();
+    }
 
     //@RequestMapping(method = RequestMethod.POST)
     @PostMapping("/fileup")
     public String create(/*@Valid Singer singer, BindingResult bindingResult, Model uiModel,
                          HttpServletRequest httpServletRequest, RedirectAttributes redirectAttributes,
-                         Locale locale, */@RequestParam(value="file", required=false) Part file) {
+                         Locale locale, */@RequestParam(value = "file", required = false) Part file) {
         System.out.println("Creating singer");
 //        if (bindingResult.hasErrors()) {
 //            uiModel.addAttribute("message", new Message("error",
@@ -75,7 +85,7 @@ public class HelloController {
     @RequestMapping(value = "/photo/{id}", method = RequestMethod.GET)
     @ResponseBody
     public byte[] downloadPhoto(@PathVariable("id") Long id) {
-        System.out.println("return byte arr id=" + id );
+        System.out.println("return byte arr id=" + id);
         //Singer singer = singerService.findById(id);
 
 //        if (singer.getPhoto() != null) {
@@ -84,6 +94,6 @@ public class HelloController {
 //        }
 
         //return singer.getPhoto();
-        return new byte[] {25,32,67,-102};
+        return new byte[]{25, 32, 67, -102};
     }
 }
