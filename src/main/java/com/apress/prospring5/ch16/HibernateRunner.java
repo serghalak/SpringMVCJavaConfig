@@ -3,6 +3,8 @@ package com.apress.prospring5.ch16;
 
 import com.apress.prospring5.ch16.model.Role;
 import com.apress.prospring5.ch16.model.User;
+import com.apress.prospring5.ch16.model.converter.Birthday;
+import com.apress.prospring5.ch16.model.converter.BirthdayConverter;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy;
@@ -23,6 +25,7 @@ public class HibernateRunner {
         final Configuration configuration = new Configuration();
         configuration.setPhysicalNamingStrategy(new CamelCaseToUnderscoresNamingStrategy());
         configuration.addAnnotatedClass(User.class);
+        configuration.addAttributeConverter(new BirthdayConverter(), true);
         configuration.configure("hibernate.cfg.xml");
         try (SessionFactory sessionFactory = configuration.buildSessionFactory();
              Session session = sessionFactory.openSession()) {
@@ -30,11 +33,12 @@ public class HibernateRunner {
             session.beginTransaction();
 
             User user = User.builder()
-                    .username("ivan02@gmail.com")
+                    .username("ivan03@gmail.com")
                     .firstname("Ivan")
                     .lastname("Ivanov")
-                    .birthDate(LocalDate.of(2000, 1, 19))
-                    .age(20)
+                    //.birthDate(LocalDate.of(2000, 1, 19))
+                    .birthday(new Birthday(LocalDate.of(2000,1,19)))
+                    //.age(20)
                     .role(Role.ADMIN)
                     .build();
             session.save(user);

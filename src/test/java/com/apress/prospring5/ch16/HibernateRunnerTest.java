@@ -2,6 +2,7 @@ package com.apress.prospring5.ch16;
 
 import com.apress.prospring5.ch16.model.Role;
 import com.apress.prospring5.ch16.model.User;
+import com.apress.prospring5.ch16.model.converter.Birthday;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,8 +41,8 @@ class HibernateRunnerTest {
                 .username("ivan@gmail.com")
                 .firstname("Ivan")
                 .lastname("Ivanov")
-                .birthDate(LocalDate.of(2000, 1, 19))
-                .age(20)
+                .birthday(new Birthday(LocalDate.of(2000, 1, 19)))
+                //.age(20)
                 .role(Role.ADMIN)
                 .build();
 
