@@ -1,5 +1,6 @@
 package com.apress.prospring5.ch16;
 
+import com.apress.prospring5.ch16.model.Role;
 import com.apress.prospring5.ch16.model.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,6 +42,7 @@ class HibernateRunnerTest {
                 .lastname("Ivanov")
                 .birthDate(LocalDate.of(2000, 1, 19))
                 .age(20)
+                .role(Role.ADMIN)
                 .build();
 
         String sql = "insert into %s(%s) values (%s)";

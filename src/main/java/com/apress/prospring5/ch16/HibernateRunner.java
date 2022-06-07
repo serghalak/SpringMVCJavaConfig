@@ -1,6 +1,7 @@
 package com.apress.prospring5.ch16;
 
 
+import com.apress.prospring5.ch16.model.Role;
 import com.apress.prospring5.ch16.model.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -29,11 +30,12 @@ public class HibernateRunner {
             session.beginTransaction();
 
             User user = User.builder()
-                    .username("ivan@gmail.com")
+                    .username("ivan02@gmail.com")
                     .firstname("Ivan")
                     .lastname("Ivanov")
                     .birthDate(LocalDate.of(2000, 1, 19))
                     .age(20)
+                    .role(Role.ADMIN)
                     .build();
             session.save(user);
             session.getTransaction().commit();
