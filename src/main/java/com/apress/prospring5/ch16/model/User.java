@@ -2,10 +2,13 @@ package com.apress.prospring5.ch16.model;
 
 import com.apress.prospring5.ch16.model.converter.Birthday;
 import com.apress.prospring5.ch16.model.converter.BirthdayConverter;
+import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -16,6 +19,7 @@ import java.time.LocalDate;
 @Builder
 @Entity
 @Table(name = "users")
+@TypeDef(name = "dmdev", typeClass = JsonStringType.class)
 public class User {
 
     @Id
@@ -25,7 +29,7 @@ public class User {
 //    @Column(name = "birth_date")
 //    private LocalDate birthDate;
 
-    @Convert(converter = BirthdayConverter.class)
+    //@Convert(converter = BirthdayConverter.class)
     @Column(name = "birth_date")
     private Birthday birthday;
 
@@ -33,5 +37,10 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+
+    //@Type(type = "com.vladmihalcea.hibernate.type.json.JsonStringType")
+    @Type(type = "dmdev")
+    private String info;
 
 }
