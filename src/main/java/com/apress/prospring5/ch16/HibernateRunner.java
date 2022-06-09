@@ -4,13 +4,11 @@ package com.apress.prospring5.ch16;
 import com.apress.prospring5.ch16.model.Role;
 import com.apress.prospring5.ch16.model.User;
 import com.apress.prospring5.ch16.model.converter.Birthday;
-import com.apress.prospring5.ch16.model.converter.BirthdayConverter;
 import com.apress.prospring5.ch16.util.HibernateUtil;
-import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy;
-import org.hibernate.cfg.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,6 +16,10 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class HibernateRunner {
+
+    private static final Logger log =  LoggerFactory.getLogger(HibernateRunner.class);
+    //private static final Logger log =  Logger.getLogger(HibernateRunner.class);
+
     public static void main(String[] args) throws SQLException {
         final Connection connection = DriverManager.getConnection(
                 "jdbc:mysql://localhost:3306/hb_student_tracker",
@@ -34,7 +36,9 @@ public class HibernateRunner {
                 //.age(20)
                 .role(Role.ADMIN)
                 .build();
-
+        log.info("User entity is created: {}", user);
+        log.info("logger>>>>>>>>>>>>>>>>>>>>>>>>Logger");
+        System.out.println("sout>>>>>>>>>>>>>>>>Logger");
         try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory()) {
 
             try (Session session1 = sessionFactory.openSession()) {
