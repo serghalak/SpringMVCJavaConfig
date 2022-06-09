@@ -5,6 +5,7 @@ import com.apress.prospring5.ch16.model.Role;
 import com.apress.prospring5.ch16.model.User;
 import com.apress.prospring5.ch16.model.converter.Birthday;
 import com.apress.prospring5.ch16.model.converter.BirthdayConverter;
+import com.apress.prospring5.ch16.util.HibernateUtil;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -23,29 +24,38 @@ public class HibernateRunner {
                 "hb_student_tracker", "hb_student_tracker");
         System.out.println("connection: " + connection);
 
-        final Configuration configuration = new Configuration();
-        configuration.setPhysicalNamingStrategy(new CamelCaseToUnderscoresNamingStrategy());
-        configuration.addAnnotatedClass(User.class);
-        configuration.addAttributeConverter(new BirthdayConverter(), true);
-        configuration.registerTypeOverride(new JsonStringType());
-        configuration.configure("hibernate.cfg.xml");
-        try (SessionFactory sessionFactory = configuration.buildSessionFactory();
-             Session session = sessionFactory.openSession()) {
+        User user = User.builder()
+                .username("ivan09@gmail.com")
+                .firstname("Ivan")
+                .lastname("Ivanov")
+                //.birthDate(LocalDate.of(2000, 1, 19))
+                .birthday(new Birthday(LocalDate.of(2000,1,19)))
+                .info("{\"name\": \"Ivan\",\"id\": \"26\" }")
+                //.age(20)
+                .role(Role.ADMIN)
+                .build();
 
-            session.beginTransaction();
+        try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory()) {
 
-            User user = User.builder()
-                    .username("ivan07@gmail.com")
-                    .firstname("Ivan")
-                    .lastname("Ivanov")
-                    //.birthDate(LocalDate.of(2000, 1, 19))
-                    .birthday(new Birthday(LocalDate.of(2000,1,19)))
-                    .info("{\"name\": \"Ivan\",\"id\": \"26\" }")
-                    //.age(20)
-                    .role(Role.ADMIN)
-                    .build();
-            session.save(user);
-            session.getTransaction().commit();
+            try (Session session1 = sessionFactory.openSession()) {
+                session1.beginTransaction();
+
+                session1.saveOrUpdate(user);
+
+                session1.getTransaction().commit();
+            }
+
+            try (Session session2 = sessionFactory.openSession()) {
+                session2.beginTransaction();
+                user.setFirstname("Sveta");
+                //session2.refresh(user);
+                session2.merge(user);
+                session2.getTransaction().commit();
+            }
         }
+
+
+
+
     }
 }
