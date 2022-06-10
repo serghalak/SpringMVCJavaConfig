@@ -24,14 +24,14 @@ public class User {
 
     @Id
     private String username;
-    private String firstname;
-    private String lastname;
-//    @Column(name = "birth_date")
-//    private LocalDate birthDate;
 
-    //@Convert(converter = BirthdayConverter.class)
-    @Column(name = "birth_date")
-    private Birthday birthday;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "firstname", column = @Column(name = "firstname")),
+            @AttributeOverride(name = "lastname", column = @Column(name = "lastname")),
+            @AttributeOverride(name = "birthday", column = @Column(name = "birth_date"))
+    })
+    private PersonalInfo personalInfo;
 
     private int age;
 

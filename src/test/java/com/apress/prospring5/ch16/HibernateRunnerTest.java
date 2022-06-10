@@ -1,5 +1,6 @@
 package com.apress.prospring5.ch16;
 
+import com.apress.prospring5.ch16.model.PersonalInfo;
 import com.apress.prospring5.ch16.model.Role;
 import com.apress.prospring5.ch16.model.User;
 import com.apress.prospring5.ch16.model.converter.Birthday;
@@ -59,9 +60,14 @@ class HibernateRunnerTest {
     void checkReflectionApi() throws SQLException, IllegalAccessException {
         User user = User.builder()
                 .username("ivan@gmail.com")
-                .firstname("Ivan")
-                .lastname("Ivanov")
-                .birthday(new Birthday(LocalDate.of(2000, 1, 19)))
+                .personalInfo(PersonalInfo.builder()
+                        .firstname("Ivan")
+                        .lastname("Ivanov")
+                        .birthday(new Birthday(LocalDate.of(2000,1,19)))
+                        .build())
+//                .firstname("Ivan")
+//                .lastname("Ivanov")
+//                .birthday(new Birthday(LocalDate.of(2000, 1, 19)))
                 //.age(20)
                 .role(Role.ADMIN)
                 .build();
