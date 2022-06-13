@@ -1,6 +1,7 @@
 package com.apress.prospring5.ch16.model;
 
 import com.apress.prospring5.ch16.model.converter.Birthday;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,13 +9,16 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Embeddable
-public class PersonalInfo {
+public class PersonalInfo implements Serializable {
+
+    private static final long serialVersionUID = 4505317170595548893L;
 
     private String firstname;
     private String lastname;

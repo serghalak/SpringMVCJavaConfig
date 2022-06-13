@@ -4,6 +4,7 @@ package com.apress.prospring5.ch16;
 import com.apress.prospring5.ch16.model.PersonalInfo;
 import com.apress.prospring5.ch16.model.Role;
 import com.apress.prospring5.ch16.model.User;
+import com.apress.prospring5.ch16.model.User1;
 import com.apress.prospring5.ch16.model.converter.Birthday;
 import com.apress.prospring5.ch16.util.HibernateUtil;
 import org.hibernate.Session;
@@ -27,8 +28,8 @@ public class HibernateRunner {
                 "hb_student_tracker", "hb_student_tracker");
         System.out.println("connection: " + connection);
 
-        User user = User.builder()
-                .username("ivan10@gmail.com")
+        User1 user1 = User1.builder()
+                .username("ivan@gmail.com")
 //                .firstname("Ivan")
 //                .lastname("Ivanov")
 //                //.birthDate(LocalDate.of(2000, 1, 19))
@@ -42,26 +43,45 @@ public class HibernateRunner {
                 //.age(20)
                 .role(Role.ADMIN)
                 .build();
-        log.info("User entity is created: {}", user);
+        log.info("User entity is created: {}", user1);
         log.info("logger>>>>>>>>>>>>>>>>>>>>>>>>Logger");
         System.out.println("sout>>>>>>>>>>>>>>>>Logger");
         try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory()) {
 
-            try (Session session1 = sessionFactory.openSession()) {
-                session1.beginTransaction();
+//            try (Session session1 = sessionFactory.openSession()) {
+//                session1.beginTransaction();
+//
+//                session1.saveOrUpdate(user1);
+//
+//                session1.getTransaction().commit();
+//            }
 
-                session1.saveOrUpdate(user);
+//            try (Session session2 = sessionFactory.openSession()) {
+//                session2.beginTransaction();
+//                //user1.setFirstname("Petr");
+//                //final User1 user11 = session2.find(User1.class, "ivan@gmail.com");
+//                user1.getPersonalInfo().setFirstname("Petr");
+//                user1.getPersonalInfo().setLastname("Petrov");
+//                user1.getPersonalInfo().setBirthday(new Birthday(LocalDate.of(2000,1,2)));
+//                //session2.refresh(user);
+//                session2.merge(user1);
+//                session2.getTransaction().commit();
+//            }
 
-                session1.getTransaction().commit();
-            }
+            try (Session session = sessionFactory.openSession()) {
 
-            try (Session session2 = sessionFactory.openSession()) {
-                session2.beginTransaction();
-                //user.setFirstname("Sveta");
-                user.getPersonalInfo().setFirstname("Peter");
-                //session2.refresh(user);
-                session2.merge(user);
-                session2.getTransaction().commit();
+                PersonalInfo key = PersonalInfo.builder()
+                        .birthday(new Birthday(LocalDate.of(2000, 1, 18)))
+                        .firstname("Ivan")
+                        .lastname("Ivanov")
+                        .build();
+
+                System.out.println(">>>>: " +
+                        new Birthday(LocalDate.of(2000, 1, 19)).getBirthDate());
+                User1 userByKey = session.get(User1.class, key);
+                System.out.println(">>>>user1 by embadded key: " + userByKey);
+
+
             }
         }
 
