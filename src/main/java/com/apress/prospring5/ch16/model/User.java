@@ -23,6 +23,10 @@ import java.time.LocalDate;
 public class User {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
 
     @Embedded
