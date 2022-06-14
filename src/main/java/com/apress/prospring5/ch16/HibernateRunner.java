@@ -25,22 +25,27 @@ public class HibernateRunner {
                 "hb_student_tracker", "hb_student_tracker");
         System.out.println("connection: " + connection);
 
-        User2 user1 = User2.builder()
+        Company company = Company.builder()
+                .name("Google")
+                .build();
+        User user = User.builder()
                 .username("ivan@gmail.com")
 //                .firstname("Ivan")
 //                .lastname("Ivanov")
-//                //.birthDate(LocalDate.of(2000, 1, 19))
+                //.birthDate(LocalDate.of(2000, 1, 19))
 //                .birthday(new Birthday(LocalDate.of(2000,1,19)))
-                .personalInfo(PersonalInfo1.builder()
+                .personalInfo(PersonalInfo.builder()
                         .firstname("Ivan")
                         .lastname("Ivanov")
-                       // .birthday(new Birthday(LocalDate.of(2000,1,19)))
+                        .birthday(new Birthday(LocalDate.of(2000,1,19)))
                         .build())
                 .info("{\"name\": \"Ivan\",\"id\": \"26\" }")
                 //.age(20)
                 .role(Role.ADMIN)
+                .company(company)
                 .build();
-        log.info("User entity is created: {}", user1);
+
+        log.info("User entity is created: {}", user);
         log.info("logger>>>>>>>>>>>>>>>>>>>>>>>>Logger");
         System.out.println("sout>>>>>>>>>>>>>>>>Logger");
         try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory()) {
@@ -48,8 +53,10 @@ public class HibernateRunner {
             try (Session session1 = sessionFactory.openSession()) {
                 session1.beginTransaction();
 
-                session1.saveOrUpdate(user1);
-
+                //session1.save(company);
+                //session1.save(user);
+                final User user1 = session1.get(User.class, 1L);
+                System.out.println(user1);
                 session1.getTransaction().commit();
             }
 
@@ -65,23 +72,23 @@ public class HibernateRunner {
 //                session2.getTransaction().commit();
 //            }
 
-            try (Session session = sessionFactory.openSession()) {
-
-
-
-                PersonalInfo1 key = PersonalInfo1.builder()
-                        //.birthday(new Birthday(LocalDate.of(2000, 1, 18)))
-                        .firstname("Ivan")
-                        .lastname("Ivanov")
-                        .build();
-
-//                System.out.println(">>>>: " +
-//                        new Birthday(LocalDate.of(2000, 1, 19)).getBirthDate());
-                User2 userByKey = session.get(User2.class, key);
-                System.out.println(">>>>user1 by embadded key: " + userByKey);
-
-
-            }
+//            try (Session session = sessionFactory.openSession()) {
+//
+//
+//
+//                PersonalInfo1 key = PersonalInfo1.builder()
+//                        //.birthday(new Birthday(LocalDate.of(2000, 1, 18)))
+//                        .firstname("Ivan")
+//                        .lastname("Ivanov")
+//                        .build();
+//
+////                System.out.println(">>>>: " +
+////                        new Birthday(LocalDate.of(2000, 1, 19)).getBirthDate());
+//                User2 userByKey = session.get(User2.class, key);
+//                System.out.println(">>>>user1 by embadded key: " + userByKey);
+//
+//
+//            }
         }
 
 

@@ -3,10 +3,7 @@ package com.apress.prospring5.ch16.model;
 import com.apress.prospring5.ch16.model.converter.Birthday;
 import com.apress.prospring5.ch16.model.converter.BirthdayConverter;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
@@ -23,7 +20,7 @@ import java.time.LocalDate;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "username", nullable = false, unique = true)
@@ -46,5 +43,9 @@ public class User {
     //@Type(type = "com.vladmihalcea.hibernate.type.json.JsonStringType")
     @Type(type = "dmdev")
     private String info;
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "company_id")
+    private Company company;
 
 }

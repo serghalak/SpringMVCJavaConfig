@@ -29,7 +29,7 @@
 
 
     <logger name="com.apress.prospring5.ch16" additivity="false">
-        <level value="info"/>
+        <level value="debug"/>
         <appender-ref ref="console"/>
         <appender-ref ref="file"/>
     </logger>
