@@ -1,9 +1,14 @@
 package com.apress.prospring5.ch16;
 
+import com.apress.prospring5.ch16.model.Company;
 import com.apress.prospring5.ch16.model.PersonalInfo;
 import com.apress.prospring5.ch16.model.Role;
 import com.apress.prospring5.ch16.model.User;
 import com.apress.prospring5.ch16.model.converter.Birthday;
+import com.apress.prospring5.ch16.util.HibernateUtil;
+import lombok.Cleanup;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,6 +42,19 @@ class HibernateRunnerTest {
 
     @Test
     void main() {
+    }
+
+    @Test
+    void oneToMany() {
+        @Cleanup final SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+        @Cleanup final Session session = sessionFactory.openSession();
+
+        session.beginTransaction();
+        final Company company = session.get(Company.class, 3L);
+        assertEquals(3L, company.getId());
+        assertEquals("Google", company.getName());
+
+        session.getTransaction().commit();
     }
 
     @Test
