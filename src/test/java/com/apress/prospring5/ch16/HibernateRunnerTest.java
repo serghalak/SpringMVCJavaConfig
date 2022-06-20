@@ -45,6 +45,34 @@ class HibernateRunnerTest {
     }
 
     @Test
+    void deleteCompany() {
+        @Cleanup final SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+        @Cleanup final Session session = sessionFactory.openSession();
+
+        session.beginTransaction();
+        final Company company = session.get(Company.class, 4L);
+        session.delete(company);
+        session.getTransaction().commit();
+    }
+
+    @Test
+    void addUserToNewCompany() {
+        @Cleanup final SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+        @Cleanup final Session session = sessionFactory.openSession();
+
+        session.beginTransaction();
+        final Company facebook = Company.builder()
+                .name("Facebook")
+                .build();
+        final User build = User.builder()
+                .username("sveta@gmail.com")
+                .build();
+        facebook.addUser(build);
+        session.save(facebook);
+        session.getTransaction().commit();
+    }
+
+    @Test
     void oneToMany() {
         @Cleanup final SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
         @Cleanup final Session session = sessionFactory.openSession();

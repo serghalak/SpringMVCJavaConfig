@@ -25,7 +25,13 @@ public class Company {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "company", cascade = CascadeType.PERSIST)
+    @Builder.Default
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
     //@JoinColumn(name = "company_id")
     private List<User> users = new ArrayList<>();
+
+    public void addUser(User user) {
+        users.add(user);
+        user.setCompany(this);
+    }
 }
