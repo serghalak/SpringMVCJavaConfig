@@ -26,10 +26,10 @@ public class HibernateRunner {
         System.out.println("connection: " + connection);
 
         Company company = Company.builder()
-                .name("Google")
+                .name("Microsoft")
                 .build();
         User user = User.builder()
-                .username("ivan@gmail.com")
+                .username("ivan01@gmail.com")
 //                .firstname("Ivan")
 //                .lastname("Ivanov")
                 //.birthDate(LocalDate.of(2000, 1, 19))
@@ -56,7 +56,9 @@ public class HibernateRunner {
                 //session1.save(company);
                 //session1.save(user);
                 final User user1 = session1.get(User.class, 1L);
-                System.out.println(user1);
+                //System.out.println(user1);
+
+                session1.evict(user1);
                 session1.getTransaction().commit();
             }
 

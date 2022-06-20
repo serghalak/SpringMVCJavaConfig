@@ -44,7 +44,8 @@ public class User {
     @Type(type = "dmdev")
     private String info;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY,
+            cascade = {CascadeType.DETACH})
     @JoinColumn(name = "company_id")
     private Company company;
 
