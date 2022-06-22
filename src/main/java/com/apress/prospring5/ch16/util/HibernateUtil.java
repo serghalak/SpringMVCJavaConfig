@@ -1,9 +1,6 @@
 package com.apress.prospring5.ch16.util;
 
-import com.apress.prospring5.ch16.model.Company;
-import com.apress.prospring5.ch16.model.User;
-import com.apress.prospring5.ch16.model.User1;
-import com.apress.prospring5.ch16.model.User2;
+import com.apress.prospring5.ch16.model.*;
 import com.apress.prospring5.ch16.model.converter.BirthdayConverter;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import lombok.experimental.UtilityClass;
@@ -22,6 +19,7 @@ public class HibernateUtil {
         configuration.addAnnotatedClass(User1.class);
         configuration.addAnnotatedClass(User2.class);
         configuration.addAnnotatedClass(Company.class);
+        configuration.addAnnotatedClass(Profile.class);
         configuration.addAttributeConverter(new BirthdayConverter(), true);
         configuration.registerTypeOverride(new JsonStringType());
         configuration.configure("hibernate.cfg.xml");

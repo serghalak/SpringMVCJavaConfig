@@ -15,6 +15,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 @Entity
+@ToString(exclude = {"company", "profile"})
+@EqualsAndHashCode(exclude = {"company", "profile"})
 @Table(name = "users")
 @TypeDef(name = "dmdev", typeClass = JsonStringType.class)
 public class User {
@@ -44,9 +46,14 @@ public class User {
     @Type(type = "dmdev")
     private String info;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY,
-            cascade = {CascadeType.DETACH})
+    @ManyToOne(optional = false, fetch = FetchType.LAZY
+            /*, cascade = {CascadeType.DETACH}*/)
     @JoinColumn(name = "company_id")
     private Company company;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Profile profile;
+
+
 
 }

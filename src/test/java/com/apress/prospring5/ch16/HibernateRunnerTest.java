@@ -1,9 +1,6 @@
 package com.apress.prospring5.ch16;
 
-import com.apress.prospring5.ch16.model.Company;
-import com.apress.prospring5.ch16.model.PersonalInfo;
-import com.apress.prospring5.ch16.model.Role;
-import com.apress.prospring5.ch16.model.User;
+import com.apress.prospring5.ch16.model.*;
 import com.apress.prospring5.ch16.model.converter.Birthday;
 import com.apress.prospring5.ch16.util.HibernateUtil;
 import lombok.Cleanup;
@@ -24,11 +21,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class HibernateRunnerTest {
 
@@ -44,6 +41,77 @@ class HibernateRunnerTest {
     void main() {
     }
 
+
+    @Test
+    void checkOneToOne() {
+
+        try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+             Session session = sessionFactory.openSession()) {
+
+            session.beginTransaction();
+
+//            final User user = session.get(User.class, 4L);
+//            System.out.println(user);
+//            Company company = Company.builder()
+//                    .name("HP")
+//                    .build();
+            final Company company = session.get(Company.class, 7L);
+            User user = User.builder()
+                    .username("test4@gmail.com")
+                    .company(company)
+                    .build();
+
+            company.addUser(user);
+            session.save(company);
+            Profile profile = Profile.builder()
+                    .street("Dogs")
+                    .language("ua")
+                    .build();
+
+            session.save(user);
+            profile.setUser(user);
+            //session.save(profile);
+
+            session.getTransaction().commit();
+        }
+    }
+
+
+    @Test
+    void checkOrphanRemoval() {
+
+        try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+             Session session = sessionFactory.openSession()) {
+
+            session.beginTransaction();
+            Company company = session.get(Company.class, 4L);
+            company.getUsers().removeIf(user -> user.getId().equals(2L));
+
+            session.getTransaction().commit();
+        }
+    }
+
+    @Test
+    void checkLazyInitialization() {
+
+        Company company = null;
+
+        try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+             Session session = sessionFactory.openSession()) {
+
+            session.beginTransaction();
+            company = session.get(Company.class, 4L);
+            //session.delete(company);
+            session.getTransaction().commit();
+        }
+
+        final List<User> users = company.getUsers();
+        for (User user : users) {
+            System.out.println(user);
+        }
+    }
+
+
     @Test
     void deleteCompany() {
         @Cleanup final SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
@@ -51,7 +119,7 @@ class HibernateRunnerTest {
 
         session.beginTransaction();
         final Company company = session.get(Company.class, 4L);
-        session.delete(company);
+        //session.delete(company);
         session.getTransaction().commit();
     }
 
@@ -109,7 +177,7 @@ class HibernateRunnerTest {
                 .personalInfo(PersonalInfo.builder()
                         .firstname("Ivan")
                         .lastname("Ivanov")
-                        .birthday(new Birthday(LocalDate.of(2000,1,19)))
+                        .birthday(new Birthday(LocalDate.of(2000, 1, 19)))
                         .build())
 //                .firstname("Ivan")
 //                .lastname("Ivanov")
