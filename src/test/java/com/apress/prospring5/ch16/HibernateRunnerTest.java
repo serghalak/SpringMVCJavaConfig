@@ -57,14 +57,14 @@ class HibernateRunnerTest {
 //                    .build();
             final Company company = session.get(Company.class, 7L);
             User user = User.builder()
-                    .username("test4@gmail.com")
+                    .username("test5@gmail.com")
                     .company(company)
                     .build();
 
             company.addUser(user);
-            session.save(company);
+            //session.save(company);
             Profile profile = Profile.builder()
-                    .street("Dogs")
+                    .street("Racoon")
                     .language("ua")
                     .build();
 
