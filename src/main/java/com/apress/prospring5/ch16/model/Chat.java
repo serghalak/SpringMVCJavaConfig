@@ -9,8 +9,8 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {"users"})
-@ToString(exclude = {"users"})
+@EqualsAndHashCode(exclude = {"userChats"})
+@ToString(exclude = {"userChats"})
 @Builder
 @Entity
 public class Chat {
@@ -22,12 +22,16 @@ public class Chat {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Builder.Default
-    @ManyToMany(mappedBy = "chats")
-    private Set<User> users = new HashSet<>();
+//    @Builder.Default
+//    @ManyToMany(mappedBy = "chats")
+//    private Set<User> users = new HashSet<>();
 
-    public void addUser(User user) {
-        users.add(user);
-        user.getChats().add(this);
-    }
+    @Builder.Default
+    @OneToMany(mappedBy = "chat")
+    private Set<UserChat> userChats = new HashSet<>();
+
+//    public void addUser(User user) {
+//        users.add(user);
+//        user.getChats().add(this);
+//    }
 }

@@ -17,8 +17,8 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @Entity
-@ToString(exclude = {"company", "profile", "chats"})
-@EqualsAndHashCode(exclude = {"company", "profile", "chats"})
+@ToString(exclude = {"company", "profile", "userChats"})
+@EqualsAndHashCode(exclude = {"company", "profile", "userChats"})
 @Table(name = "users")
 @TypeDef(name = "dmdev", typeClass = JsonStringType.class)
 public class User {
@@ -56,16 +56,20 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
     private Profile profile;
 
-    @Builder.Default
-    @ManyToMany
-    @JoinTable(name = "user_chat",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "chat_id", referencedColumnName = "id"))
-    private Set<Chat> chats = new HashSet<>();
+//    @Builder.Default
+//    @ManyToMany
+//    @JoinTable(name = "user_chat",
+//            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+//            inverseJoinColumns = @JoinColumn(name = "chat_id", referencedColumnName = "id"))
+//    private Set<Chat> chats = new HashSet<>();
 
-    public void addChat(Chat chat) {
-        chats.add(chat);
-        chat.getUsers().add(this);
-    }
+    @Builder.Default
+    @OneToMany(mappedBy = "user")
+    private Set<UserChat>userChats = new HashSet<>();
+
+//    public void addChat(Chat chat) {
+//        chats.add(chat);
+//        chat.getUsers().add(this);
+//    }
 
 }

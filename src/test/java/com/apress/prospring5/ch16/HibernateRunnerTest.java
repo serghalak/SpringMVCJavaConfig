@@ -19,6 +19,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -41,9 +42,8 @@ class HibernateRunnerTest {
     void main() {
     }
 
-
     @Test
-    void checkManyToMant() {
+    void checkManyToMany_Separate() {
 
         try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
              Session session = sessionFactory.openSession()) {
@@ -51,7 +51,32 @@ class HibernateRunnerTest {
             session.beginTransaction();
 
             User user = session.get(User.class, 4L);
-            user.getChats().clear();
+            Chat chat = session.get(Chat.class, 1L);
+            session.save(chat);
+
+            UserChat userChat = UserChat.builder()
+                    .createdAt(Instant.now())
+                    .createdBy(user.getUsername())
+                    .build();
+            userChat.setChat(chat);
+            userChat.setUser(user);
+
+            session.save(userChat);
+
+            session.getTransaction().commit();
+        }
+    }
+
+    @Test
+    void checkManyToMany() {
+
+        try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+             Session session = sessionFactory.openSession()) {
+
+            session.beginTransaction();
+
+            User user = session.get(User.class, 4L);
+            //user.getChats().clear();
 //            Chat chat = Chat.builder()
 //                    .name("misha")
 //                    .build();

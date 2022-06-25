@@ -21,6 +21,7 @@ public class HibernateUtil {
         configuration.addAnnotatedClass(Company.class);
         configuration.addAnnotatedClass(Profile.class);
         configuration.addAnnotatedClass(Chat.class);
+        configuration.addAnnotatedClass(UserChat.class);
         configuration.addAttributeConverter(new BirthdayConverter(), true);
         configuration.registerTypeOverride(new JsonStringType());
         configuration.configure("hibernate.cfg.xml");
