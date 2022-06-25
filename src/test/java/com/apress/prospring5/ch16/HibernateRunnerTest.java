@@ -43,6 +43,27 @@ class HibernateRunnerTest {
 
 
     @Test
+    void checkManyToMant() {
+
+        try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+             Session session = sessionFactory.openSession()) {
+
+            session.beginTransaction();
+
+            User user = session.get(User.class, 4L);
+            user.getChats().clear();
+//            Chat chat = Chat.builder()
+//                    .name("misha")
+//                    .build();
+//
+//            user.addChat(chat);
+            //chat.addUser(user);
+            //session.save(chat);
+            session.getTransaction().commit();
+        }
+    }
+
+    @Test
     void checkOneToOne() {
 
         try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();

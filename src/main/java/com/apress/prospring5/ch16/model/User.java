@@ -9,14 +9,16 @@ import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
-@ToString(exclude = {"company", "profile"})
-@EqualsAndHashCode(exclude = {"company", "profile"})
+@ToString(exclude = {"company", "profile", "chats"})
+@EqualsAndHashCode(exclude = {"company", "profile", "chats"})
 @Table(name = "users")
 @TypeDef(name = "dmdev", typeClass = JsonStringType.class)
 public class User {
@@ -54,6 +56,16 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
     private Profile profile;
 
+    @Builder.Default
+    @ManyToMany
+    @JoinTable(name = "user_chat",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "chat_id", referencedColumnName = "id"))
+    private Set<Chat> chats = new HashSet<>();
 
+    public void addChat(Chat chat) {
+        chats.add(chat);
+        chat.getUsers().add(this);
+    }
 
 }

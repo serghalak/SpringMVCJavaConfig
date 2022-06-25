@@ -20,6 +20,7 @@ public class HibernateUtil {
         configuration.addAnnotatedClass(User2.class);
         configuration.addAnnotatedClass(Company.class);
         configuration.addAnnotatedClass(Profile.class);
+        configuration.addAnnotatedClass(Chat.class);
         configuration.addAttributeConverter(new BirthdayConverter(), true);
         configuration.registerTypeOverride(new JsonStringType());
         configuration.configure("hibernate.cfg.xml");
