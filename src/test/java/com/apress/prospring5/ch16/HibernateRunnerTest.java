@@ -43,6 +43,22 @@ class HibernateRunnerTest {
     }
 
     @Test
+    void lacaleInfo() {
+        try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+             Session session = sessionFactory.openSession()) {
+
+            session.beginTransaction();
+
+            final Company company = session.get(Company.class, 1L);
+            company.getLacales().add(LocalInfo.of("ua", "Опис на українській мові"));
+            company.getLacales().add(LocalInfo.of("en", "Description in English"));
+
+            session.getTransaction().commit();
+        }
+
+    }
+
+    @Test
     void checkManyToMany_Separate() {
 
         try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
@@ -52,7 +68,7 @@ class HibernateRunnerTest {
 
             User user = session.get(User.class, 4L);
             Chat chat = session.get(Chat.class, 1L);
-            session.save(chat);
+
 
             UserChat userChat = UserChat.builder()
                     .createdAt(Instant.now())

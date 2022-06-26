@@ -30,6 +30,11 @@ public class Company {
     //@JoinColumn(name = "company_id")
     private List<User> users = new ArrayList<>();
 
+    @Builder.Default
+    @ElementCollection
+    @CollectionTable(name = "company_locale", joinColumns = @JoinColumn(name = "company_id"))
+    private List<LocalInfo>lacales = new ArrayList<>();
+
     public void addUser(User user) {
         users.add(user);
         user.setCompany(this);
