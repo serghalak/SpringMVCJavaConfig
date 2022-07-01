@@ -28,11 +28,17 @@ public class Company {
     @Builder.Default
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, orphanRemoval = true)
     //@JoinColumn(name = "company_id")
+    @OrderBy( "username DESC, personalInfo.lastname ASC")
     private List<User> users = new ArrayList<>();
 
     @Builder.Default
     @ElementCollection
     @CollectionTable(name = "company_locale", joinColumns = @JoinColumn(name = "company_id"))
+    @AttributeOverrides({//використовуємо в випадку якщо назви в колекція і в БД не співпадають
+            //в нашому випадкуспівпадають
+            @AttributeOverride(name = "lang", column = @Column(name = "lang")),
+            @AttributeOverride(name = "description", column = @Column(name = "description"))
+    })
     private List<LocalInfo>lacales = new ArrayList<>();
 
     public void addUser(User user) {

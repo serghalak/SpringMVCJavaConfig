@@ -49,10 +49,10 @@ class HibernateRunnerTest {
 
             session.beginTransaction();
 
-            final Company company = session.get(Company.class, 1L);
-            company.getLacales().add(LocalInfo.of("ua", "Опис на українській мові"));
-            company.getLacales().add(LocalInfo.of("en", "Description in English"));
-
+            final Company company = session.get(Company.class, 7L);
+//            company.getLacales().add(LocalInfo.of("ua", "Опис на українській мові"));
+//            company.getLacales().add(LocalInfo.of("en", "Description in English"));
+            company.getUsers().forEach(System.out::println);
             session.getTransaction().commit();
         }
 
