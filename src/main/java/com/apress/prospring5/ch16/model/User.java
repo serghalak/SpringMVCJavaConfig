@@ -21,7 +21,7 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = {"company", "profile", "userChats"})
 @Table(name = "users")
 @TypeDef(name = "dmdev", typeClass = JsonStringType.class)
-public class User {
+public class User implements BaseEntity<Long>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

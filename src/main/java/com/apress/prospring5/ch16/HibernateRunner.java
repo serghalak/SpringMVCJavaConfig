@@ -25,6 +25,12 @@ public class HibernateRunner {
                 "hb_student_tracker", "hb_student_tracker");
         System.out.println("connection: " + connection);
 
+//        final Connection connection = DriverManager.getConnection(
+//                "jdbc:h2:mem:dmdev",
+//                "", "");
+        System.out.println("connection: " + connection);
+
+
         Company company = Company.builder()
                 .name("Microsoft")
                 .build();
@@ -59,18 +65,20 @@ public class HibernateRunner {
                 //System.out.println(user1);
 
                 session1.evict(user1);
+                //session1.save(user1);
+                System.out.println(">>>>>>>>>>>" + user1);
                 session1.getTransaction().commit();
             }
-
+                    System.out.println("pause");
 //            try (Session session2 = sessionFactory.openSession()) {
 //                session2.beginTransaction();
 //                //user1.setFirstname("Petr");
 //                //final User1 user11 = session2.find(User1.class, "ivan@gmail.com");
-//                user1.getPersonalInfo().setFirstname("Petr");
-//                user1.getPersonalInfo().setLastname("Petrov");
-//                user1.getPersonalInfo().setBirthday(new Birthday(LocalDate.of(2000,1,2)));
-//                //session2.refresh(user);
-//                session2.merge(user1);
+////                user1.getPersonalInfo().setFirstname("Petr");
+////                user1.getPersonalInfo().setLastname("Petrov");
+////                user1.getPersonalInfo().setBirthday(new Birthday(LocalDate.of(2000,1,2)));
+////                //session2.refresh(user);
+////                session2.merge(user1);
 //                session2.getTransaction().commit();
 //            }
 

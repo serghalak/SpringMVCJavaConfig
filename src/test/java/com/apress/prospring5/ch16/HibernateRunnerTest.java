@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+
 class HibernateRunnerTest {
 
     @BeforeEach
@@ -40,6 +41,25 @@ class HibernateRunnerTest {
 
     @Test
     void main() {
+    }
+
+    @Test
+    void checkH2() {
+        try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
+             Session session = sessionFactory.openSession()) {
+
+            session.beginTransaction();
+            Company company = Company.builder()
+                    .name("Google")
+                    .build();
+            session.save(company);
+            session.flush();
+            final Company company1 = session.get(Company.class, 1L);
+            System.out.println(">>>>>>>"+company1);
+            session.getTransaction().commit();
+
+
+        }
     }
 
     @Test
